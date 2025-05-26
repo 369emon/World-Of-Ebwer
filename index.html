@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World of Ebwer - Universal Forensic Search Engine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0c111b;
+            color: #e2e8f0;
+        }
+        .holographic {
+            background: linear-gradient(135deg, #4f46e5, #d946ef);
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+        }
+        .cyberpunk-button {
+            background: linear-gradient(to bottom, #6b7280, #374151);
+            border: 2px solid #a855f7;
+            color: #f9fafb;
+            padding: 14px 28px;
+            border-radius: 8px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+        }
+        .cyberpunk-button:hover {
+            background: linear-gradient(to bottom, #8b5cf6, #4b5563);
+            border-color: #d8b4fe;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8);
+            transform: translateY(-2px);
+        }
+        .cyberpunk-input {
+            background-color: #1d2430;
+            border: 1px solid #6b7280;
+            color: #f5f5f5;
+            padding: 12px;
+            border-radius: 6px;
+            box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        .cyberpunk-input:focus {
+            outline: none;
+            border-color: #e070fa;
+            box-shadow: 0 5px 8px rgba(0, 0, 0, 0.5);
+        }
+        .card {
+            background-color: rgba(24, 31, 41, 0.9);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
+            border: 1px solid #6b7280;
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8);
+            border-color: #d946ef;
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2.5rem;
+        }
+        .loading-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 120px;
+        }
+        .loading-spinner {
+            border: 6px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 6px solid #a855f7;
+            width: 60px;
+            height: 60px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #tools-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            align-items: start;
+        }
+        #tools-content .card {
+            padding: 20px;
+            border: 1px solid #4a5568;
+            border-radius: 8px;
+            background-color: rgba(39, 45, 56, 0.7);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Added transition */
+        }
+        #tools-content .card:hover {
+            transform: translateY(-5px) scale(1.03);  /* Added scale on hover */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.9);
+        }
+        #tools-content .card h3{
+            color: #d946ef;
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+            transition: color 0.3s ease;
+        }
+        #tools-content .card:hover h3{
+             color: #f0abfc;
+        }
+        #tools-content .card ul{
+            list-style: disc;
+            padding-left: 20px;
+            color: #e2e8f0;
+            line-height: 1.7;
+        }
+         #tools-content .card p{
+            color: #f5f5f5;
+            line-height: 1.7;
+        }
+        .animated-bg {
+            background: linear-gradient(45deg, #1e3a8a, #172554, #0b090a, #082f49, #1e3a8a);
+            background-size: 400% 400%;
+            animation: animateBg 20s ease infinite;
+        }
+        @keyframes animateBg {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        .glowing-border {
+            border: 2px solid;
+            border-color: rgba(167, 139, 250, 0.7);
+            box-shadow: 0 0 15px rgba(167, 139, 250, 0.5);
+            animation: pulseBorder 2s infinite alternate;
+        }
+        @keyframes pulseBorder {
+            from {
+                border-color: rgba(167, 139, 250, 0.7);
+                box-shadow: 0 0 10px rgba(167, 139, 250, 0.5);
+            }
+            to {
+                border-color: rgba(167, 139, 250, 0.9);
+                box-shadow: 0 0 25px rgba(167, 139, 250, 0.7);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white animated-bg">
+    <header class="bg-gray-900 bg-opacity-75 py-6">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl font-bold text-center holographic">World of Ebwer</h1>
+            <p class="text-gray-400 text-center mt-3">Universal Forensic Search Engine</p>
+        </div>
+    </header>
+
+    <nav class="bg-gray-900 bg-opacity-90 py-4 mt-10">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center space-x-8">
+                <a href="#search" class="text-gray-300 hover:text-white transition-colors text-lg font-semibold">Search</a>
+                <a href="#tools" class="text-gray-300 hover:text-white transition-colors text-lg font-semibold">Tools</a>
+                <a href="#about" class="text-gray-300 hover:text-white transition-colors text-lg font-semibold">About</a>
+                <a href="#contact" class="text-gray-300 hover:text-white transition-colors text-lg font-semibold">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-12">
+        <section id="search" class="mb-20">
+            <h2 class="text-3xl font-semibold text-center mb-10 holographic">Forensic Search</h2>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Search for forensic data..." class="cyberpunk-input w-full max-w-md mr-6 glowing-border">
+                <button id="search-button" class="cyberpunk-button">
+                     <img src="https://media1.giphy.com/media/l4JyNNqiVzBMbDOVO/giphy.gif?cid=6c09b95249o9j7a9w13akzyo501vdhiglsinn2uxyxw76vb9&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=g" alt="Search" style="width: 30px; height: 30px; margin-right: 8px; display: inline-block;">
+                    Search
+                </button>
+            </div>
+            <div id="search-results" class="mt-10">
+                <p class="text-gray-400 text-center">Enter a query to begin your search.</p>
+            </div>
+        </section>
+
+        <section id="tools" class="mb-20">
+            <h2 class="text-3xl font-semibold text-center mb-10 holographic">Forensic Tools</h2>
+            <div id="tools-loading" class="loading-indicator">
+                 <div class="loading-spinner"></div>
+            </div>
+            <div id="tools-content" style="display:none;">
+                </div>
+        </section>
+
+        <section id="about" class="mb-20">
+            <h2 class="text-3xl font-semibold text-center mb-10 holographic">About Us</h2>
+            <div class="card">
+                <p class="text-gray-300">
+                    World of Ebwer is a universal forensic search engine, designed to provide investigators, researchers, and
+                    legal professionals with powerful tools to search and analyze digital data.  Our mission is to make
+                    forensic investigation more efficient and accessible, enabling users to quickly find the information they need
+                    from a wide range of sources. We are committed to innovation and excellence in the field of digital forensics.
+                </p>
+                 <div class="mt-6 text-center">
+                    <img src="https://media3.giphy.com/media/l4JyQqyt9S1WTiE6c/giphy.gif?cid=6c09b952c56ii6kike7mrr4e2t9dljcjegfq3ue0vi7y3hur&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=g" alt="Cyber Security" style="max-width: 80%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="mb-20">
+            <h2 class="text-3xl font-semibold text-center mb-10 holographic">Contact Us</h2>
+            <div class="card">
+                <form class="space-y-8">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-300">Name</label>
+                        <input type="text" id="name" placeholder="Your Name" class="cyberpunk-input w-full">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-300">Email</label>
+                        <input type="email" id="email" placeholder="Your Email" class="cyberpunk-input w-full">
+                    </div>
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-gray-300">Message</label>
+                        <textarea id="message" placeholder="Your Message" class="cyberpunk-input w-full h-40"></textarea>
+                    </div>
+                    <button type="submit" class="cyberpunk-button">Send Message</button>
+                </form>
+                 <div class="mt-6 text-center">
+                    <img src="https://media2.giphy.com/media/eMVfOrFXlmAIyKpYXI/giphy.gif?cid=6c09b952vkwfrsefzbqgqs5bcoty01qxp338owga5zp9omza&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=g" alt="Contact" style="max-width: 80%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.5);">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-900 bg-opacity-75 py-6 mt-12">
+        <div class="container mx-auto px-4 text-center text-gray-400">
+            &copy; 2025 World of Ebwer. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('search-button').addEventListener('click', function() {
+            const query = document.getElementById('search-input').value;
+            const resultsContainer = document.getElementById('search-results');
+
+            if (query.trim() === '') {
+                resultsContainer.innerHTML = '<p class="text-red-400 text-center">Please enter a search query.</p>';
+                return;
+            }
+
+            resultsContainer.innerHTML = `<p class="text-yellow-300 text-center">Searching for: "${query}"...</p>`;
+            // Simulate a search (replace with actual search logic)
+            setTimeout(function() {
+                // Replace this with your actual data fetching logic
+                fetchSearchResults(query)
+                    .then(results => {
+                        let resultsHtml = '<div class="mt-8 space-y-6">';
+                         if (results && results.length > 0) {
+                            results.forEach(result => {
+                                resultsHtml += `<div class="bg-gray-800 p-6 rounded-md border border-gray-700">
+                                                    <p class="text-gray-300">${result}</p>
+                                                </div>`;
+                            });
+                        } else {
+                             resultsHtml += '<p class="text-gray-400 text-center">No results found for your query. Please try a different search term.</p>';
+                        }
+                        resultsHtml += '</div>';
+                        resultsContainer.innerHTML = resultsHtml;
+                    })
+                    .catch(error => {
+                        resultsContainer.innerHTML = `<p class="text-red-400 text-center">Error fetching search results: ${error.message}</p>`;
+                    });
+
+            }, 1500);
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const toolsContainer = document.getElementById('tools-content');
+            const loadingIndicator = document.getElementById('tools-loading');
+            toolsContainer.style.display = 'none';
+
+            // Simulate fetching tools data (replace with actual fetching)
+            fetchForensicTools()
+                .then(tools => {
+                    loadingIndicator.style.display = 'none';
+                    toolsContainer.style.display = 'grid';
+                    tools.forEach(tool => {
+                        const card = document.createElement('div');
+                        card.className = 'card';
+                        card.innerHTML = `<h3 class="text-xl font-semibold mb-4 text-purple-400">${tool.name}</h3>
+                                         <p class="text-gray-300">${tool.description}</p>
+                                         <ul class="list-disc list-inside text-gray-400">${tool.details.map(item => `<li>${item}</li>`).join('')}</ul>`;
+                        toolsContainer.appendChild(card);
+                    });
+                })
+                .catch(error => {
+                    loadingIndicator.style.display = 'none';
+                    toolsContainer.innerHTML = `<p class="text-red-400 text-center">Error fetching tools: ${error.message}</p>`;
+                });
+        });
+
+        // Simulated data fetching functions (replace with your actual implementation)
+        async function fetchSearchResults(query) {
+            // Replace this with your actual API call or data retrieval method
+            // Example (using a placeholder API):
+            // const response = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
+            // if (!response.ok) {
+            //     throw new Error(`HTTP error! status: ${response.status}`);
+            // }
+            // const data = await response.json();
+            // return data;
+
+            // Simulate API response
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
+            if (query.toLowerCase().includes('error')) {
+                throw new Error("Simulated error fetching results.");
+            }
+            const simulatedResults = [
+                `Result 1 for "${query}" from Source A`,
+                `Result 2 for "${query}" from Source B`,
+                `Result 3 for "${query}" from Source C`,
+            ];
+            return simulatedResults;
+        }
+
+        async function fetchForensicTools() {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+             const simulatedTools = [
+                {
+                    name: "FTK Imager",
+                    description: "A data preview and imaging tool for acquiring evidence.",
+                    details: ["Disk Imaging", "Data Preview", "Evidence Acquisition", "Hashes"]
+                },
+                {
+                    name: "Autopsy",
+                    description: "A digital forensics platform and graphical interface to The Sleuth Kit.",
+                    details: ["File System Analysis", "Keyword Search", "Timeline Analysis", "Web Artifacts"]
+                },
+                {
+                    name: "Wireshark",
+                    description: "A network protocol analyzer.",
+                    details: ["Packet Capture", "Protocol Analysis", "Network Tracing", "VoIP Analysis"]
+                },
+                 {
+                    name: "Volatility",
+                    description: "An advanced memory forensics framework.",
+                    details: ["Memory Analysis", "Malware Detection", "Artifact Extraction", "Windows, Linux, macOS"]
+                },
+                {
+                    name: "Cellebrite UFED",
+                    description: "A mobile device data extraction and analysis solution.",
+                    details: ["Mobile Extraction", "Data Recovery", "Analysis", "Reporting"]
+                },
+                {
+                    name: "The Sleuth Kit (TSK)",
+                    description: "A command-line tool for disk image analysis.",
+                    details: ["Disk Image Analysis", "File System Analysis", "Data Recovery", "Command-Line"]
+                }
+            ];
+            return simulatedTools;
+        }
+    </script>
+</body>
+</html>
+
